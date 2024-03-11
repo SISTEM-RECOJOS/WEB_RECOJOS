@@ -76,16 +76,16 @@ export function CFormInscription (){
                 <div className="input-group">
                     <div className="input-box">
                         <label >Nombres :</label>
-                        <input  type="text" name="name" onChange={handleChange} placeholder="Digite sus nombres" required/>
+                        <input  type="text" name="name" onChange={handleChange} placeholder="Nombres" required/>
                     </div>
 
                     <div className="input-box">
                         <label >Apellido Paterno :</label>
-                        <input  type="text" name="lastName"  onChange={handleChange} placeholder="Digite seu sobrenome" required/>
+                        <input  type="text" name="lastName"  onChange={handleChange} placeholder="Apellido Materno" required/>
                     </div>
                     <div className="input-box">
                         <label >Apellido Materno :</label>
-                        <input  type="text" name="secondLastName"  onChange={handleChange} placeholder="Digite seu sobrenome" required/>
+                        <input  type="text" name="secondLastName"  onChange={handleChange} placeholder="Apellido Materno" required/>
                     </div>
                     <div className="input-box">
                         <label >Fecha de Nacimiento :</label>
