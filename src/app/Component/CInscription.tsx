@@ -32,13 +32,17 @@ export function CFormInscription (){
             referenceLocation:""
           }
     );
+    
+    const AddLatLng=(lat:number,lng:number)=>{
+        SetInscription((prevPerson) => ({ ...prevPerson, latitude: lat ,longitude:lng}));
+    }
 
     const handleSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
         event.preventDefault();
 
         try {
             // Realiza una solicitud POST al endpoint de la API
-            console.log(uri)
+            console.log(inscription)
             await POST("inscription",inscription)
 
             // Aquí puedes manejar la respuesta de la API, como mostrar un mensaje de éxito, etc.
@@ -62,7 +66,7 @@ export function CFormInscription (){
     return (
         <div className="container">
         <div className="form-image">
-            <GoogleMaps/>
+            <GoogleMaps onMapClick={AddLatLng}/>
         </div>
         <div className="form">
             <form onSubmit={handleSubmit}>

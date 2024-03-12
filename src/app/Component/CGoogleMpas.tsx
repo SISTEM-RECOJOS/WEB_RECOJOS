@@ -1,8 +1,15 @@
 "use client"
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
+import { MInscription } from '@/Model/MInscription';
+import { Lateef } from 'next/font/google';
 
-export default function GoogleMaps() {
+interface GoogleMapsProps {
+    onMapClick: (lat:number,lng:number) => void;
+}
+
+export default function GoogleMaps({onMapClick} : GoogleMapsProps) {
+
     const mapRef = useRef<HTMLDivElement>(null);
     const markerRef = useRef<google.maps.Marker | null>(null);
 
@@ -24,7 +31,8 @@ export default function GoogleMaps() {
 
             map.addListener("click", (event: google.maps.MapMouseEvent) => {
                 const latLng = event.latLng;
-                console.log(latLng?.lat()+","+ latLng?.lng())
+                const lat:number|undefined = latLng?.lat() === undefined ? 0 : latLng?.lat();
+                const lng:number|undefined = latLng?.lng()=== undefined ? 0 : latLng?.lng();
                 if (markerRef.current) {
                     markerRef.current.setPosition(latLng);
                 } else {
@@ -34,6 +42,7 @@ export default function GoogleMaps() {
                         title: "Ubicación seleccionada",
                     });
                 }
+                onMapClick(lat,lng)
             });
         };
 
