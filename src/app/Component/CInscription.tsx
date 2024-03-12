@@ -3,6 +3,7 @@
 import React, { useState, FormEvent, ChangeEvent } from 'react';
 import {MInscription} from "../../Model/MInscription"
 import { POST } from '@/Comunnication/API_RECOJOS_C';
+import GoogleMaps from './CGoogleMpas';
 
 
 
@@ -61,8 +62,7 @@ export function CFormInscription (){
     return (
         <div className="container">
         <div className="form-image">
-        <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d2263.899802812163!2d-66.21114729387213!3d-17.392078839572186!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1ses!2sbo!4v1709912078368!5m2!1ses!2sbo" 
-        width="100%" height="100%" style={{border:0}}  loading="lazy"></iframe>
+            <GoogleMaps/>
         </div>
         <div className="form">
             <form onSubmit={handleSubmit}>
