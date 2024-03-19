@@ -4,8 +4,7 @@ import React, { useState, FormEvent, ChangeEvent } from 'react';
 import {MInscription} from "../../Model/MInscription"
 import {MApiResponse} from "../../Model/MApiResponse"
 import { POST } from '@/Comunnication/API_RECOJOS_C';
-import GoogleMaps from './CGoogleMpas';
-import axios from 'axios';
+
 
 
 export function CFormInscription (){
@@ -35,26 +34,15 @@ export function CFormInscription (){
             referenceLocation:""
           }
     );
-    
-    const AddLatLng=(lat:number,lng:number)=>{
-        SetInscription((prevPerson) => ({ ...prevPerson, latitude: lat ,longitude:lng}));
-    }
 
     const handleSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
         event.preventDefault();
 
         try {
             // Realiza una solicitud POST al endpoint de la API
-            const response = await axios.get<MApiResponse>(`http://localhost:5289/api/inscription/${inscription.cellPhone}`);
-            setApiResponse(response.data);
 
-            if(apiResponse?.response===1){
-                await POST("inscription",inscription)
-                console.log("inscription Success!")
-            }else{
-                console.log("Esta cuenta ya existe")
-            }
-            
+            console.log(uri)
+            await POST("inscription",inscription)
 
             // Aquí puedes manejar la respuesta de la API, como mostrar un mensaje de éxito, etc.
         } catch (error) {
@@ -74,121 +62,120 @@ export function CFormInscription (){
         SetInscription((prevPerson) => ({ ...prevPerson, [name]: value }));
     };
 
-    return (
-        <div className="container">
-        <div className="form-image">
-            <GoogleMaps onMapClick={AddLatLng}/>
-        </div>
-        <div className="form">
-            <form onSubmit={handleSubmit}>
-                <div className="form-header">
-                    <div className="title">
-                        <h1>INSCRIPCION</h1>
-                    </div>
+    
+  return (
+    <div className="container">
+    <div className="form-image">
+    <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d2263.899802812163!2d-66.21114729387213!3d-17.392078839572186!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1ses!2sbo!4v1709912078368!5m2!1ses!2sbo" 
+    width="100%" height="100%" style={{border:0}}  loading="lazy"></iframe>
+    </div>
+    <div className="form">
+        <form onSubmit={handleSubmit}>
+            <div className="form-header">
+                <div className="title">
+                    <h1>INSCRIPCION</h1>
+                </div>
+               
+            </div>
+
+            <div className="input-group">
+                <div className="input-box">
+                    <label >Nombres :</label>
+                    <input  type="text" name="name" onChange={handleChange} placeholder="Nombres" required/>
+                </div>
+
+                <div className="input-box">
+                    <label >Apellido Paterno :</label>
+                    <input  type="text" name="lastName"  onChange={handleChange} placeholder="Apellido Materno" required/>
+                </div>
+                <div className="input-box">
+                    <label >Apellido Materno :</label>
+                    <input  type="text" name="secondLastName"  onChange={handleChange} placeholder="Apellido Materno" required/>
+                </div>
+                <div className="input-box">
+                    <label >Fecha de Nacimiento :</label>
+                    <input  type="date" name="birthDay"  onChange={handleChange} placeholder="Digite su e-mail" required/>
+                </div>
+
+                <div className="input-box">
+                    <label >Celular :</label>
+                    <input  type="tel" name="cellPhone"  onChange={handleChange} placeholder="(xx) xxxx-xxxx" required/>
+                </div>
+
+                <div className="input-box">
+                    <label >Referencia de ubicacion :</label>
+                    <input  type="text" name="referenceLocation" onChange={handleChange} placeholder="Referencia de Ubicacion" required/>
+                </div>
+                <div className="input-box">
+                    <label>Genero : 
+                        <br/>
+                        <select  name='gender' defaultValue={"MA"} onChange={handleSelectChange}  className="gender-group">
+                            <option  value="MA">Masculino</option>
+                            <option  value="FE">Femenino</option>
+                            <option  value="OT">Otro</option>
+                        </select>
+                    </label>
                    
                 </div>
-
-                <div className="input-group">
-                    <div className="input-box">
-                        <label >Nombres :</label>
-                        <input  type="text" name="name" onChange={handleChange} placeholder="Nombres" required/>
-                    </div>
-
-                    <div className="input-box">
-                        <label >Apellido Paterno :</label>
-                        <input  type="text" name="lastName"  onChange={handleChange} placeholder="Apellido Materno" required/>
-                    </div>
-                    <div className="input-box">
-                        <label >Apellido Materno :</label>
-                        <input  type="text" name="secondLastName"  onChange={handleChange} placeholder="Apellido Materno" required/>
-                    </div>
-                    <div className="input-box">
-                        <label >Fecha de Nacimiento :</label>
-                        <input  type="date" name="birthDay"  onChange={handleChange} placeholder="Digite seu e-mail" required/>
-                    </div>
-
-                    <div className="input-box">
-                        <label >Celular :</label>
-                        <input  type="tel" name="cellPhone"  onChange={handleChange} placeholder="(xx) xxxx-xxxx" required/>
-                    </div>
-
-                    <div className="input-box">
-                        <label >Referencia de ubicacion :</label>
-                        <input  type="text" name="referenceLocation" onChange={handleChange} placeholder="Referencia de Ubicacion" required/>
-                    </div>
-                    <div className="input-box">
-                        <label>Genero : 
-                            <br/>
-                            <select  name='gender' defaultValue={"MA"} onChange={handleSelectChange}  className="gender-group">
-                                <option  value="MA">Masculino</option>
-                                <option  value="FE">Femenino</option>
-                                <option  value="OT">Otro</option>
-                            </select>
-                        </label>
-                       
-                    </div>
-                    <div className="input-box">
-                        <label>Inscripcion Plan : 
-                            <br/>
-                            <select name='inscription' defaultValue={"BA"} onChange={handleSelectChange} className="gender-group">
-                                <option  value="BA">Baldes</option>
-                                <option  value="CO">Contenedore</option>
-                            </select>
-                        </label>
-                       
-                    </div>
-                    <div className="input-box">
-                        <label >Cantidad de Baldes :</label>
-                        <input id="baldes" type="number"  onChange={handleChange} name="amountBucket" placeholder="0" required/>
-                    </div>
-                    <div className="input-box">
-                        <label>Cantidad de Contenedores :</label>
-                        <input id="contenedore" type="number"  onChange={handleChange} name="amountContainer" placeholder="0" required/>
-                    </div>
-
-                    <div className="input-box">
-                    <label>Frecuencia de Recojo : 
+                <div className="input-box">
+                    <label>Inscripcion Plan : 
                         <br/>
-                        <select name='frecuency' defaultValue={"SE"} onChange={handleSelectChange} className="gender-group">
-                            <option  value="SE">Semanal</option>
-                            <option  value="QU">Quincenal</option>
+                        <select name='inscription' defaultValue={"BA"} onChange={handleSelectChange} className="gender-group">
+                            <option  value="BA">Baldes</option>
+                            <option  value="CO">Contenedore</option>
                         </select>
                     </label>
+                   
+                </div>
+                <div className="input-box">
+                    <label >Cantidad de Baldes :</label>
+                    <input id="baldes" type="number"  onChange={handleChange} name="amountBucket" placeholder="0" required/>
+                </div>
+                <div className="input-box">
+                    <label>Cantidad de Contenedores :</label>
+                    <input id="contenedore" type="number"  onChange={handleChange} name="amountContainer" placeholder="0" required/>
                 </div>
 
                 <div className="input-box">
-                    <label>Dia de Recojo : 
-                        <br/>
-                        <select name='pickUpDay' onChange={handleSelectChange} defaultValue={"Lunes, 08:00 am. a 10:00 am."} className="gender-group">
-                            <option  value="Lunes, 08:00 am. a 10:00 am.">Lunes, 08:00 am. a 10:00 am. </option>
-                            <option  value="Lunes, 04:00 pm. a 06:00 pm.">Lunes, 04:00 pm. a 06:00 pm.  </option>
-                            <option  value="Domingo, 02:00 pm. a 04:00 pm. ">Domingo, 02:00 pm. a 04:00 pm.  </option>
-                            <option  value="Domingo, 04:00 pm. a 6:00 pm.  ">Domingo, 04:00 pm. a 6:00 pm.  </option>
-                        </select>
-                    </label>
-                </div>
+                <label>Frecuencia de Recojo : 
+                    <br/>
+                    <select name='frecuency' defaultValue={"SE"} onChange={handleSelectChange} className="gender-group">
+                        <option  value="SE">Semanal</option>
+                        <option  value="QU">Quincenal</option>
+                    </select>
+                </label>
+            </div>
 
-                <div className="input-box">
-                    <label> Metodo de Pago : 
-                        <br/>
-                        <select name='paymentMethod' defaultValue={"Efectivo pagado en cada Recojo"} onChange={handleSelectChange} className="gender-group">
-                            <option  value="Efectivo pagado en cada Recojo">Efectivo pagado en cada Recojo </option>
-                            <option  value="Efectivo pagado Mensualmente">Efectivo pagado Mensualmente </option>
-                            <option  value="Qr pagado en cada Recojo">Qr pagado en cada Recojo </option>
-                            <option  value="Qr pagado Mensualmente">Qr pagado Mensualmente</option>
-                        </select>
-                    </label>
-                </div>
+            <div className="input-box">
+                <label>Dia de Recojo : 
+                    <br/>
+                    <select name='pickUpDay' onChange={handleSelectChange} defaultValue={"Lunes, 08:00 am. a 10:00 am."} className="gender-group">
+                        <option  value="Lunes, 08:00 am. a 10:00 am.">Lunes, 08:00 am. a 10:00 am. </option>
+                        <option  value="Lunes, 04:00 pm. a 06:00 pm.">Lunes, 04:00 pm. a 06:00 pm.  </option>
+                        <option  value="Domingo, 02:00 pm. a 04:00 pm. ">Domingo, 02:00 pm. a 04:00 pm.  </option>
+                        <option  value="Domingo, 04:00 pm. a 6:00 pm.  ">Domingo, 04:00 pm. a 6:00 pm.  </option>
+                    </select>
+                </label>
+            </div>
 
-                </div>
-
-                
-
-                <div className="continue-button">
-                    <button>INSCRIPBIRME</button>
-                </div>
-            </form>
-        </div>
+            <div className="input-box">
+                <label> Metodo de Pago : 
+                    <br/>
+                    <select name='paymentMethod' defaultValue={"Efectivo pagado en cada Recojo"} onChange={handleSelectChange} className="gender-group">
+                        <option  value="Efectivo pagado en cada Recojo">Efectivo pagado en cada Recojo </option>
+                        <option  value="Efectivo pagado Mensualmente">Efectivo pagado Mensualmente </option>
+                        <option  value="Qr pagado en cada Recojo">Qr pagado en cada Recojo </option>
+                        <option  value="Qr pagado Mensualmente">Qr pagado Mensualmente</option>
+                    </select>
+                </label>
+            </div>
+            </div>
+        
+            <div className="continue-button">
+                <button>INSCRIBIRME</button>
+            </div>
+        </form>
     </div>
-    )
+</div>
+)
 }
