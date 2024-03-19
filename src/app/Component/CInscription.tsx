@@ -2,14 +2,17 @@
 
 import React, { useState, FormEvent, ChangeEvent } from 'react';
 import {MInscription} from "../../Model/MInscription"
+import {MApiResponse} from "../../Model/MApiResponse"
 import { POST } from '@/Comunnication/API_RECOJOS_C';
 import GoogleMaps from './CGoogleMpas';
-
+import axios from 'axios';
 
 
 export function CFormInscription (){
     const uri:string = process.env.URI_API_RECOJOS === undefined ? "" : process.env.URI_API_RECOJOS;
     const today = new Date().toISOString().slice(0, 10); 
+    const [apiResponse, setApiResponse] = useState<MApiResponse | null>(null);
+
     const [inscription,SetInscription] = useState<MInscription>(
         {
             name: "",
@@ -42,8 +45,16 @@ export function CFormInscription (){
 
         try {
             // Realiza una solicitud POST al endpoint de la API
-            console.log(inscription)
-            await POST("inscription",inscription)
+            const response = await axios.get<MApiResponse>(`http://localhost:5289/api/inscription/${inscription.cellPhone}`);
+            setApiResponse(response.data);
+
+            if(apiResponse?.response===1){
+                await POST("inscription",inscription)
+                console.log("inscription Success!")
+            }else{
+                console.log("Esta cuenta ya existe")
+            }
+            
 
             // Aquí puedes manejar la respuesta de la API, como mostrar un mensaje de éxito, etc.
         } catch (error) {
@@ -181,29 +192,3 @@ export function CFormInscription (){
     </div>
     )
 }
-
-
-
-/*
-
-{
-  "name": "Albert",
-  "lastName": "Haisamani",
-  "secondLastName": "Crespo",
-  "birthDay": "2024-03-08",
-  "cellPhone": "234324",
-  "gender": "MA",
-  "inscription": "Balde",
-  "latitude": "3234234243",
-  "longitude": "23432424",
-  "amountBucket": 1,
-  "amountContainer": 0,
-  "frecuency": "semanal",
-  "pickUpDay": "lunes 09:30",
-  "paymentMethod": "QR fijo",
-  "registrationDate": "2024-03-08T17:32:55.115Z",
-  "modificationDate": "2024-03-08T17:32:55.115Z",
-  "status": "AC"
-}
-
-*/
