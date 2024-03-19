@@ -49,3 +49,5 @@ export default function GoogleMaps({onMapClick} : GoogleMapsProps) {
 
     return <div style={{ width: "100%", height: "100%" }} ref={mapRef}>Load...</div>;
 }
+
+// rama Abert
