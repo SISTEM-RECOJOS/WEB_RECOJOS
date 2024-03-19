@@ -4,6 +4,7 @@ import React, { useState, FormEvent, ChangeEvent } from 'react';
 import {MInscription} from "../../Model/MInscription"
 import {MApiResponse} from "../../Model/MApiResponse"
 import { POST } from '@/Comunnication/API_RECOJOS_C';
+import GoogleMaps from './CGoogleMpas';
 
 
 
@@ -41,7 +42,7 @@ export function CFormInscription (){
         try {
             // Realiza una solicitud POST al endpoint de la API
 
-            console.log(uri)
+            console.log(inscription)
             await POST("inscription",inscription)
 
             // Aquí puedes manejar la respuesta de la API, como mostrar un mensaje de éxito, etc.
@@ -61,13 +62,15 @@ export function CFormInscription (){
         const { name, value } = e.target;
         SetInscription((prevPerson) => ({ ...prevPerson, [name]: value }));
     };
+    const onMapClick = (lat:number,lng:number)=>{
+        SetInscription((prevPerson) => ({ ...prevPerson, latitude:lat , longitude:lng }));
+    }
 
     
   return (
     <div className="container">
     <div className="form-image">
-    <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d2263.899802812163!2d-66.21114729387213!3d-17.392078839572186!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1ses!2sbo!4v1709912078368!5m2!1ses!2sbo" 
-    width="100%" height="100%" style={{border:0}}  loading="lazy"></iframe>
+    <GoogleMaps onMapClick={onMapClick}/>
     </div>
     <div className="form">
         <form onSubmit={handleSubmit}>
