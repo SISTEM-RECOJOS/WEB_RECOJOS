@@ -1,8 +1,7 @@
 "use client"
 import React, { useEffect, useRef, useState } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
-import { MInscription } from '@/Model/MInscription';
-import { Lateef } from 'next/font/google';
+
 
 interface GoogleMapsProps {
     onMapClick: (lat:number,lng:number) => void;
