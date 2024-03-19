@@ -182,4 +182,3 @@ export function CFormInscription (){
 </div>
 )
 }
-// integration main to Development
