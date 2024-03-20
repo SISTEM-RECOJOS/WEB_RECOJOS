@@ -40,10 +40,9 @@ export function CFormInscription (){
         event.preventDefault();
 
         try {
-            // Realiza una solicitud POST al endpoint de la API
 
 
-            console.log(inscription)
+
 
             if(inscription.amountBucket === 0 && inscription.amountContainer === 0)
             {
