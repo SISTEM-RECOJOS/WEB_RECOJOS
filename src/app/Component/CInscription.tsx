@@ -37,6 +37,21 @@ export function CFormInscription (){
 
         try {
             // Realiza una solicitud POST al endpoint de la API
+            if(inscription.amountBucket === 0 && inscription.amountContainer === 0)
+            {
+
+                alert("La cantidad de baldes o contenedores no puede ser 0")
+                return;
+            }
+            else
+            {
+                if(inscription.amountBucket < 0 || inscription.amountContainer < 0)
+                {
+
+                    alert("La cantidad de baldes o contenedores no puede ser negativo")
+                    return;
+                }
+            }
             console.log(uri)
             await POST("inscription",inscription)
 

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import  swal from  'sweetalert2';
-//codigo para un alerta
+
+//Alerta de registro exitoso
 class CAlert extends Component {
     showAlert() {
         swal.fire({
@@ -11,9 +12,9 @@ class CAlert extends Component {
         });
     }
 
-    render() {
-        return (this.showAlert());
-    }
+   // render() {
+        //return (this.showAlert());
+    //}
 }
 
 export default CAlert;
