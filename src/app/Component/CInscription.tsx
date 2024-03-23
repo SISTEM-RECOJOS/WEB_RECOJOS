@@ -5,67 +5,83 @@ import {MInscription} from "../../Model/MInscription"
 import {MApiResponse} from "../../Model/MApiResponse"
 import { POST } from '@/Comunnication/API_RECOJOS_C';
 import GoogleMaps from './CGoogleMpas';
-
+import { Alert } from './CAlert';
+import { INSPECT_MAX_BYTES } from 'buffer';
+import '../../../public/css/alert.css';
 
 
 export function CFormInscription (){
+    const inscriptionInicial:MInscription = {
+        name: "",
+        lastName: "",
+        secondLastName: "",
+        birthDay: new Date(),
+        cellPhone: 0,
+        gender: "MA",
+        inscription: "BA",
+        latitude: 0,
+        longitude: 0,
+        amountBucket: 0,
+        amountContainer: 0,
+        frecuency: "SE",
+        pickUpDay: "Lunes, 08:00 am. a 10:00 am.",
+        paymentMethod: "Efectivo pagado en cada Recojo",
+        registrationDate: new Date(),
+        modificationDate: new Date(),
+        status: "AC",
+        referenceLocation:""
+      } ;
     const uri:string = process.env.URI_API_RECOJOS === undefined ? "" : process.env.URI_API_RECOJOS;
     const today = new Date().toISOString().slice(0, 10); 
     const [apiResponse, setApiResponse] = useState<MApiResponse | null>(null);
+    const [showAlert, setShowAlert] = useState(false);
 
+    const handleAlert = () => {
+      setShowAlert(true);
+    };
+  
+    const closeAlert = () => {
+      setShowAlert(false);
+    };
     const [inscription,SetInscription] = useState<MInscription>(
-        {
-            name: "",
-            lastName: "",
-            secondLastName: "",
-            birthDay: "",
-            cellPhone: "",
-            gender: "MA",
-            inscription: "BA",
-            latitude: 0,
-            longitude: 0,
-            amountBucket: 0,
-            amountContainer: 0,
-            frecuency: "SE",
-            pickUpDay: "Lunes, 08:00 am. a 10:00 am.",
-            paymentMethod: "Efectivo pagado en cada Recojo",
-            registrationDate: today,
-            modificationDate: today,
-            status: "AC",
-            referenceLocation:""
-          }
-    );
+        inscriptionInicial
+);
+    
 
     const handleSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
         event.preventDefault();
-
+        const todayH = new Date().toISOString().slice(0, 10); 
         try {
 
-
-
-
-            if(inscription.amountBucket === 0 && inscription.amountContainer === 0)
+            handleAlert();
+            
+            if(inscription.latitude === 0 && inscription.longitude === 0)
             {
-
-                alert("La cantidad de baldes o contenedores no puede ser 0")
-                return;
+                // alert("Seleccionees la Posicion de su ogar")
             }
-            else
+
+            if(inscription.amountBucket >= 0 || inscription.amountContainer >= 0)
             {
-                if(inscription.amountBucket < 0 || inscription.amountContainer < 0)
-                {
-
-                    alert("La cantidad de baldes o contenedores no puede ser negativo")
-                    return;
-                }
+                // alert("necesitas ingrsar la cantida de baldes o contendor")
             }
-            console.log(uri)
+            
+            if(inscription.cellPhone === 0)
+            {
+                // alert("Ingres tu numero de celular por favor")
+            }
+            if(inscription.name != "")
+            {
+                // alert("Ingres tu Nombre de celular por favor")
+            }
+         
             await POST("inscription",inscription)
+            SetInscription(inscriptionInicial);
 
             // Aquí puedes manejar la respuesta de la API, como mostrar un mensaje de éxito, etc.
         } catch (error) {
             // Maneja los errores de la solicitud POST
             console.error('Error al enviar el formulario:', error);
+            
         }
 
       };
@@ -101,16 +117,16 @@ export function CFormInscription (){
             <div className="input-group">
                 <div className="input-box">
                     <label >Nombres :</label>
-                    <input  type="text" name="name" onChange={handleChange} placeholder="Nombres" required/>
+                    <input  type="text" name="name" value={inscription.name} onChange={handleChange} placeholder="Nombres" required/>
                 </div>
 
                 <div className="input-box">
                     <label >Apellido Paterno :</label>
-                    <input  type="text" name="lastName"  onChange={handleChange} placeholder="Apellido Materno" required/>
+                    <input  type="text" name="lastName" value={inscription.lastName} onChange={handleChange} placeholder="Apellido Materno" required/>
                 </div>
                 <div className="input-box">
                     <label >Apellido Materno :</label>
-                    <input  type="text" name="secondLastName"  onChange={handleChange} placeholder="Apellido Materno" required/>
+                    <input  type="text" name="secondLastName" value={inscription.secondLastName} onChange={handleChange} placeholder="Apellido Materno" required/>
                 </div>
                 <div className="input-box">
                     <label >Fecha de Nacimiento :</label>
@@ -119,12 +135,12 @@ export function CFormInscription (){
 
                 <div className="input-box">
                     <label >Celular :</label>
-                    <input  type="tel" name="cellPhone"  onChange={handleChange} placeholder="(xx) xxxx-xxxx" required/>
+                    <input  type="tel" name="cellPhone" value={inscription.cellPhone} onChange={handleChange} placeholder="(xx) xxxx-xxxx" required/>
                 </div>
 
                 <div className="input-box">
                     <label >Referencia de ubicacion :</label>
-                    <input  type="text" name="referenceLocation" onChange={handleChange} placeholder="Referencia de Ubicacion" required/>
+                    <input  type="text" name="referenceLocation" value={inscription.referenceLocation} onChange={handleChange} placeholder="Referencia de Ubicacion" required/>
                 </div>
                 <div className="input-box">
                     <label>Genero : 
@@ -149,11 +165,11 @@ export function CFormInscription (){
                 </div>
                 <div className="input-box">
                     <label >Cantidad de Baldes :</label>
-                    <input id="baldes" type="number"  onChange={handleChange} name="amountBucket" placeholder="0" required/>
+                    <input id="baldes" type="number" value={inscription.amountBucket} onChange={handleChange} name="amountBucket" placeholder="0" required/>
                 </div>
                 <div className="input-box">
                     <label>Cantidad de Contenedores :</label>
-                    <input id="contenedore" type="number"  onChange={handleChange} name="amountContainer" placeholder="0" required/>
+                    <input id="contenedore" type="number" value={inscription.amountContainer} onChange={handleChange} name="amountContainer" placeholder="0" required/>
                 </div>
 
                 <div className="input-box">
@@ -190,13 +206,88 @@ export function CFormInscription (){
                 </label>
             </div>
             </div>
-        
+           
             <div className="continue-button">
                 <button>INSCRIBIRME</button>
             </div>
         </form>
+
+        {showAlert && (
+        <div className="alert-container">
+            <span className="close-btn" onClick={closeAlert}>&times;</span>
+          <label>INCRIPCION CREADA CORRECTAMENTE</label>
+        </div>
+      )}
     </div>
 </div>
 )
 }
 // integrate main to Deeveopment -
+
+/*
+
+{
+  "Name": "Camilaa",
+  "LastName": "Deera",
+  "SecondLastName": "Comp",
+  "BirthDay": "2000-12-12",
+  "CellPhone": 45673366",
+  "Gender": "MA",
+  "Inscription": "BA",
+  "Latitude": 39.60195023024929,
+  "Longitude": -9.070247506630178,
+  "AmountBucket": 1,
+  "AmountContainer": 0,
+  "Frecuency": "SE",
+  "PickUpDay": "Lunes, 08:00 am. a 10:00 am.",
+  "PaymentMethod": "Efectivo pagado en cada Recojo",
+  "RegistrationDate":"2000-12-12",
+  "ModificationDate":"2000-12-12",
+  "Status": "AC",
+  "ReferenceLocation": "Frente de un arbol"
+}
+
+
+{
+  "name": "Camilaa",
+  "lastName": "Deera",
+  "secondLastName": "Comp",
+  "birthDay": "2000-12-12",
+  "cellPhone": 45673366",
+  "gender": "MA",
+  "inscription": "BA",
+  "latitude": 39.60195023024929,
+  "longitude": -9.070247506630178,
+  "amountBucket": 1,
+  "amountContainer": 0,
+  "frecuency": "SE",
+  "pickUpDay": "Lunes, 08:00 am. a 10:00 am.",
+  "paymentMethod": "Efectivo pagado en cada Recojo",
+  "registrationDate":"2000-12-12",
+  "modificationDate":"2000-12-12",
+  "status": "AC",
+  "referenceLocation": "Frente de un arbol"
+}
+
+{
+  "name": "Camila",
+  "lastName": "string",
+  "secondLastName": "string",
+  "birthDay": "2024-03-22T20:32:43.889Z",
+  "cellPhone": 8788787,
+  "gender": "FE",
+  "inscription": "BA",
+  "latitude": 54.54,
+  "longitude": 34.443,
+  "amountBucket": 1,
+  "amountContainer": 0,
+  "frecuency": "SE",
+  "pickUpDay": "lunes",
+  "paymentMethod": "Contado",
+  "registrationDate": "2024-03-22T20:32:43.889Z",
+  "modificationDate": "2024-03-22T20:32:43.889Z",
+  "status": "AC",
+  "referenceLocation": "frnt de un arbol"
+}
+
+*/

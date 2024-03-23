@@ -1,20 +1,29 @@
-import React, { Component } from 'react';
-import  swal from  'sweetalert2';
+import React, { useState } from 'react';
+import '../../../public/css/alert.css';
 
-//Alerta de registro exitoso
-class CAlert extends Component {
-    showAlert() {
-        swal.fire({
-            title: 'Alert',
-            text: 'Registro exitoso',
-            icon: 'warning',
-            confirmButtonText: 'OK'
-        });
-    }
+export const Alert = () => {
+  const [showAlert, setShowAlert] = useState(false);
 
-   // render() {
-        //return (this.showAlert());
-    //}
-}
+  const handleAlert = () => {
+    setShowAlert(true);
+  };
 
-export default CAlert;
+  const closeAlert = () => {
+    setShowAlert(false);
+  };
+
+  return (
+    <div className="alert">
+      <button onClick={handleAlert}>Mostrar alerta</button>
+      {showAlert && (
+        <div className="alert-container">
+          <label>Hace Inscripcion</label>
+          <button>SI</button>
+          <button>NO</button>
+        </div>
+      )}
+    </div>
+  );
+};
+
+

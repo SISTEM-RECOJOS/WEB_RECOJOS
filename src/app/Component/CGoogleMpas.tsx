@@ -22,7 +22,7 @@ export default function GoogleMaps({onMapClick} : GoogleMapsProps) {
 
             await loader.load();
             const map = new google.maps.Map(mapRef.current as HTMLDivElement, {
-                center: { lat: 39.60128890889341, lng: -9.069839810859907 },
+                center: { lat: -17.393390, lng: -66.178033 },
                 zoom: 15,
                 mapId: 'NEXT_MAPS_TUTS',
             });
