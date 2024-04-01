@@ -3,11 +3,10 @@
 import React, { useState, FormEvent, ChangeEvent } from 'react';
 import {MInscription} from "../../Model/MInscription"
 import {MApiResponse} from "../../Model/MApiResponse"
-import { POST } from '@/Comunnication/API_RECOJOS_C';
 import GoogleMaps from './CGoogleMpas';
-import { Alert } from './CAlert';
-import { INSPECT_MAX_BYTES } from 'buffer';
-import '../../../public/css/alert.css';
+import '../css/alert.css';
+import { Inscription_Con_I } from '@/Controller/InscriptionCon';
+import { Handlee } from 'next/font/google';
 
 
 export function CFormInscription (){
@@ -52,36 +51,13 @@ export function CFormInscription (){
         event.preventDefault();
         const todayH = new Date().toISOString().slice(0, 10); 
         try {
-
-            handleAlert();
-            
-            if(inscription.latitude === 0 && inscription.longitude === 0)
-            {
-                // alert("Seleccionees la Posicion de su ogar")
+            const response = await Inscription_Con_I(inscription)
+            if(response === 1){
+                handleAlert();
+                SetInscription(inscriptionInicial);
             }
-
-            if(inscription.amountBucket >= 0 || inscription.amountContainer >= 0)
-            {
-                // alert("necesitas ingrsar la cantida de baldes o contendor")
-            }
-            
-            if(inscription.cellPhone === 0)
-            {
-                // alert("Ingres tu numero de celular por favor")
-            }
-            if(inscription.name != "")
-            {
-                // alert("Ingres tu Nombre de celular por favor")
-            }
-         
-            await POST("inscription",inscription)
-            SetInscription(inscriptionInicial);
-
-            // Aquí puedes manejar la respuesta de la API, como mostrar un mensaje de éxito, etc.
         } catch (error) {
-            // Maneja los errores de la solicitud POST
             console.error('Error al enviar el formulario:', error);
-            
         }
 
       };
@@ -103,7 +79,7 @@ export function CFormInscription (){
   return (
     <div className="container">
     <div className="form-image">
-    <GoogleMaps onMapClick={onMapClick}/>
+        <GoogleMaps onMapClick={onMapClick}/>
     </div>
     <div className="form">
         <form onSubmit={handleSubmit}>
