@@ -150,19 +150,19 @@ export function CFormInscription (){
                 </div>
 
                 <div className="input-box">
-                <label>Frecuencia de Recojo : 
-                    <br/>
-                    <select name='frecuency' defaultValue={"SE"} onChange={handleSelectChange} className="gender-group">
-                        <option  value="SE">Semanal</option>
-                        <option  value="QU">Quincenal</option>
-                    </select>
-                </label>
-            </div>
+                    <label>Frecuencia de Recojo : 
+                        <br/>
+                        <select name='frecuency' defaultValue={"SE"} onChange={handleSelectChange} className="gender-group">
+                            <option  value="SE">Semanal</option>
+                            <option  value="QU">Quincenal</option>
+                        </select>
+                    </label>
+                </div>
 
             <div className="input-box">
                 <label>Dia de Recojo : 
                     <br/>
-                    <select name='pickUpDay' onChange={handleSelectChange} defaultValue={"Lunes, 08:00 am. a 10:00 am."} className="gender-group">
+                    <select name='pickUpDay' onChange={handleSelectChange} defaultValue={"Lunes, 08:00 am. a 10:00 am."} className="gender-group ">
                         <option  value="Lunes, 08:00 am. a 10:00 am.">Lunes, 08:00 am. a 10:00 am. </option>
                         <option  value="Lunes, 04:00 pm. a 06:00 pm.">Lunes, 04:00 pm. a 06:00 pm.  </option>
                         <option  value="Domingo, 02:00 pm. a 04:00 pm. ">Domingo, 02:00 pm. a 04:00 pm.  </option>
