@@ -5,7 +5,7 @@ import { CFormInscription } from "@/app/Component/CInscription";
 
 export default function Home() {
   return (
-    <main className={styles.main}>
+    <main className="main">
       <CFormInscription/>
     </main>
   );

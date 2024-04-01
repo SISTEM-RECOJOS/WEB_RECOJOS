@@ -100,6 +100,7 @@ export function CFormInscription (){
                     <label >Apellido Paterno :</label>
                     <input  type="text" name="lastName" value={inscription.lastName} onChange={handleChange} placeholder="Apellido Materno" required/>
                 </div>
+
                 <div className="input-box">
                     <label >Apellido Materno :</label>
                     <input  type="text" name="secondLastName" value={inscription.secondLastName} onChange={handleChange} placeholder="Apellido Materno" required/>
