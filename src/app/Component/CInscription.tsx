@@ -9,10 +9,24 @@ import GoogleMaps from './CGoogleMpas';
 import '../css/alert.css';
 import { Inscription_Con_I } from '@/Controller/InscriptionCon';
 import { Handlee } from 'next/font/google';
+import LstGoogleMaps from './LstPoints';
 
+interface Point {
+    lat:number
+    lng:number
+} 
 
 export function CFormInscription (){
     // --- VARIABLES
+
+    const [points, setPoints] = useState<Point[]>([
+
+        //-17.370554, -66.187096
+        { lat: -17.370554, lng: -66.187096 }, // New York
+        { lat: 34.052235, lng: -118.243683 }, // Los Angeles
+        { lat: 51.507351, lng: -0.127758 } // London
+    ]);
+
 
     const inscriptionInicial:InscriptionMod = {
         name: "",
@@ -80,11 +94,12 @@ export function CFormInscription (){
         SetInscription((prevPerson) => ({ ...prevPerson, latitude:lat , longitude:lng }));
     }
 
+
     // -- COMPONENT
   return (
     <div className="container">
     <div className="form-image">
-        <GoogleMaps onMapClick={onMapClick}/>
+        <LstGoogleMaps points={points} onMapClick={onMapClick}/>
     </div>
     <div className="form">
         <form onSubmit={handleSubmit}>
