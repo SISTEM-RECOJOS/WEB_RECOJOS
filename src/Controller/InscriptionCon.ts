@@ -1,5 +1,6 @@
+// --- RESPONSIBLE : ALBERT
 import {Inscription_Ser_I} from "../Service/InscriptionServ"
-import { MInscription } from "@/Model/MInscription";
+import { MInscription } from "@/Model/InscriptionMod";
 
 export async function Inscription_Con_I(newInscription:MInscription):Promise<number>{
     try {

@@ -1,4 +1,5 @@
-import { MInscription } from "@/Model/MInscription";
+// RESPONSIBLE : ALBERT
+import { MInscription } from "@/Model/InscriptionMod";
 import {InsertCom} from "../Comunnication/RecojosCom"
 
 export async function Inscription_Ser_I(newInscription:MInscription):Promise<number>{

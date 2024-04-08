@@ -1,6 +1,7 @@
-import Image from "next/image";
-import styles from "./css/page.module.css";
+// Responsible Albert
+
 import { CFormInscription } from "@/app/Component/CInscription";
+
 
 
 export default function Home() {

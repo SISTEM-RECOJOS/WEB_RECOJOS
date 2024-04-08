@@ -1,8 +1,10 @@
+// --- RESPONSIBLE : ALBERT
+// --- MODIFY : ROSA
 'use client'
 
 import React, { useState, FormEvent, ChangeEvent } from 'react';
-import {MInscription} from "../../Model/MInscription"
-import {MApiResponse} from "../../Model/MApiResponse"
+import {MInscription} from "../../Model/InscriptionMod"
+import {MApiResponse} from "../../Model/ApiResponseMod"
 import GoogleMaps from './CGoogleMpas';
 import '../css/alert.css';
 import { Inscription_Con_I } from '@/Controller/InscriptionCon';
@@ -10,6 +12,8 @@ import { Handlee } from 'next/font/google';
 
 
 export function CFormInscription (){
+    // --- VARIABLES
+
     const inscriptionInicial:MInscription = {
         name: "",
         lastName: "",
@@ -46,6 +50,7 @@ export function CFormInscription (){
         inscriptionInicial
 );
     
+    // --- METHODS
 
     const handleSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
         event.preventDefault();
@@ -75,7 +80,7 @@ export function CFormInscription (){
         SetInscription((prevPerson) => ({ ...prevPerson, latitude:lat , longitude:lng }));
     }
 
-    
+    // -- COMPONENT
   return (
     <div className="container">
     <div className="form-image">
@@ -200,71 +205,3 @@ export function CFormInscription (){
 )
 }
 // integrate main to Deeveopment -
-
-/*
-
-{
-  "Name": "Camilaa",
-  "LastName": "Deera",
-  "SecondLastName": "Comp",
-  "BirthDay": "2000-12-12",
-  "CellPhone": 45673366",
-  "Gender": "MA",
-  "Inscription": "BA",
-  "Latitude": 39.60195023024929,
-  "Longitude": -9.070247506630178,
-  "AmountBucket": 1,
-  "AmountContainer": 0,
-  "Frecuency": "SE",
-  "PickUpDay": "Lunes, 08:00 am. a 10:00 am.",
-  "PaymentMethod": "Efectivo pagado en cada Recojo",
-  "RegistrationDate":"2000-12-12",
-  "ModificationDate":"2000-12-12",
-  "Status": "AC",
-  "ReferenceLocation": "Frente de un arbol"
-}
-
-
-{
-  "name": "Camilaa",
-  "lastName": "Deera",
-  "secondLastName": "Comp",
-  "birthDay": "2000-12-12",
-  "cellPhone": 45673366",
-  "gender": "MA",
-  "inscription": "BA",
-  "latitude": 39.60195023024929,
-  "longitude": -9.070247506630178,
-  "amountBucket": 1,
-  "amountContainer": 0,
-  "frecuency": "SE",
-  "pickUpDay": "Lunes, 08:00 am. a 10:00 am.",
-  "paymentMethod": "Efectivo pagado en cada Recojo",
-  "registrationDate":"2000-12-12",
-  "modificationDate":"2000-12-12",
-  "status": "AC",
-  "referenceLocation": "Frente de un arbol"
-}
-
-{
-  "name": "Camila",
-  "lastName": "string",
-  "secondLastName": "string",
-  "birthDay": "2024-03-22T20:32:43.889Z",
-  "cellPhone": 8788787,
-  "gender": "FE",
-  "inscription": "BA",
-  "latitude": 54.54,
-  "longitude": 34.443,
-  "amountBucket": 1,
-  "amountContainer": 0,
-  "frecuency": "SE",
-  "pickUpDay": "lunes",
-  "paymentMethod": "Contado",
-  "registrationDate": "2024-03-22T20:32:43.889Z",
-  "modificationDate": "2024-03-22T20:32:43.889Z",
-  "status": "AC",
-  "referenceLocation": "frnt de un arbol"
-}
-
-*/
