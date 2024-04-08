@@ -1,7 +1,9 @@
+// --- RESPOSIBLE : ALBERT
 import axios, { AxiosResponse } from "axios";
 
 export async function InsertCom(url: string, value: any): Promise<AxiosResponse> {
     try {
+        // --- VARIABLES
         const URI_API_RECOJOS = process.env.URI_API_RECOJOS as string;
         return await axios.post(`${URI_API_RECOJOS}${url}`, value);
         

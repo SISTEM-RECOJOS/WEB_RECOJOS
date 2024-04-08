@@ -3,7 +3,7 @@
 'use client'
 
 import React, { useState, FormEvent, ChangeEvent } from 'react';
-import {MInscription} from "../../Model/InscriptionMod"
+import {InscriptionMod} from "../../Model/InscriptionMod"
 import {MApiResponse} from "../../Model/ApiResponseMod"
 import GoogleMaps from './CGoogleMpas';
 import '../css/alert.css';
@@ -14,7 +14,7 @@ import { Handlee } from 'next/font/google';
 export function CFormInscription (){
     // --- VARIABLES
 
-    const inscriptionInicial:MInscription = {
+    const inscriptionInicial:InscriptionMod = {
         name: "",
         lastName: "",
         secondLastName: "",
@@ -46,7 +46,7 @@ export function CFormInscription (){
     const closeAlert = () => {
       setShowAlert(false);
     };
-    const [inscription,SetInscription] = useState<MInscription>(
+    const [inscription,SetInscription] = useState<InscriptionMod>(
         inscriptionInicial
 );
     

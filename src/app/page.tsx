@@ -1,4 +1,4 @@
-// Responsible Albert
+// --- RESPONSIBLE : ALBERT
 
 import { CFormInscription } from "@/app/Component/CInscription";
 

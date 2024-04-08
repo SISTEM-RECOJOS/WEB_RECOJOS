@@ -1,8 +1,8 @@
 // RESPONSIBLE : ALBERT
-import { MInscription } from "@/Model/InscriptionMod";
+import { InscriptionMod } from "@/Model/InscriptionMod";
 import {InsertCom} from "../Comunnication/RecojosCom"
 
-export async function Inscription_Ser_I(newInscription:MInscription):Promise<number>{
+export async function Inscription_Ser_I(newInscription:InscriptionMod):Promise<number>{
     try{
         const response = await InsertCom("inscription",newInscription);
         if(response.status != 200){

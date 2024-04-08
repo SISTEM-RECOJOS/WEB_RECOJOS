@@ -1,6 +1,6 @@
 
 
-export interface MInscription {
+export interface InscriptionMod {
     id?: string;
     name: string;
     lastName: string;
