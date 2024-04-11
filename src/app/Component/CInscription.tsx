@@ -9,7 +9,7 @@ import GoogleMaps from './CGoogleMpas';
 import '../css/alert.css';
 import { Inscription_Con_I } from '@/Controller/InscriptionCon';
 import { Handlee } from 'next/font/google';
-import LstGoogleMaps from './LstPoints';
+// import LstGoogleMaps from './LstPoints';
 
 interface Point {
     lat:number
@@ -19,13 +19,11 @@ interface Point {
 export function CFormInscription (){
     // --- VARIABLES
 
-    const [points, setPoints] = useState<Point[]>([
-
-        //-17.370554, -66.187096
-        { lat: -17.370554, lng: -66.187096 }, // New York
-        { lat: 34.052235, lng: -118.243683 }, // Los Angeles
-        { lat: 51.507351, lng: -0.127758 } // London
-    ]);
+    // const [points, setPoints] = useState<Point[]>([
+    //     { lat: -17.370554, lng: -66.187096 }, 
+    //     { lat: 34.052235, lng: -118.243683 }, 
+    //     { lat: 51.507351, lng: -0.127758 } 
+    // ]);
 
 
     const inscriptionInicial:InscriptionMod = {
@@ -48,7 +46,7 @@ export function CFormInscription (){
         status: "AC",
         referenceLocation:""
       } ;
-    const uri:string = process.env.URI_API_RECOJOS === undefined ? "" : process.env.URI_API_RECOJOS;
+    
     const today = new Date().toISOString().slice(0, 10); 
     const [apiResponse, setApiResponse] = useState<MApiResponse | null>(null);
     const [showAlert, setShowAlert] = useState(false);
@@ -70,11 +68,12 @@ export function CFormInscription (){
         event.preventDefault();
         const todayH = new Date().toISOString().slice(0, 10); 
         try {
+            console.log(inscription)
             const response = await Inscription_Con_I(inscription)
-            if(response === 1){
-                handleAlert();
-                SetInscription(inscriptionInicial);
-            }
+            // console.log(response)
+            //     handleAlert();
+            //     SetInscription(inscriptionInicial);
+            
         } catch (error) {
             console.error('Error al enviar el formulario:', error);
         }
@@ -99,7 +98,8 @@ export function CFormInscription (){
   return (
     <div className="container">
     <div className="form-image">
-        <LstGoogleMaps points={points} onMapClick={onMapClick}/>
+        {/* <LstGoogleMaps points={points} onMapClick={onMapClick}/> */}
+        <GoogleMaps onMapClick={onMapClick}/>
     </div>
     <div className="form">
         <form onSubmit={handleSubmit}>
@@ -220,3 +220,29 @@ export function CFormInscription (){
 )
 }
 // integrate main to Deeveopment -
+
+
+/*
+
+{
+  "name": "To",
+  "lastName": "string",
+  "secondLastName": "string",
+  "birthDay": "2024-04-08T18:09:55.319Z",
+  "cellPhone": 2343453,
+  "gender": "MA",
+  "inscription": "string",
+  "latitude": 34.34,
+  "longitude": 24.34,
+  "amountBucket": 1,
+  "amountContainer": 0,
+  "frecuency": "string",
+  "pickUpDay": "string",
+  "paymentMethod": "string",
+  "registrationDate": "2024-04-08T18:09:55.319Z",
+  "modificationDate": "2024-04-08T18:09:55.319Z",
+  "status": "AC",
+  "referenceLocation": "por ahi"
+}
+
+*/
