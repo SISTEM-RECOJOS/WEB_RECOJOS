@@ -1,10 +1,10 @@
 // RESPONSIBLE : ALBERT
 import { InscriptionMod } from "@/Model/InscriptionMod";
 import {InsertCom} from "../Comunnication/RecojosCom"
+import { MRInscription } from "@/Model/MInscription";
 
-export async function Inscription_Ser_I(newInscription:InscriptionMod):Promise<number>{
+export async function Inscription_Ser_I(newInscription:MRInscription):Promise<number>{
     try{
-        console.log("entra a serevice")
         const response = await InsertCom("inscription",newInscription);
        return 1
     }catch(err){

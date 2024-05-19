@@ -1,8 +1,9 @@
 // --- RESPONSIBLE : ALBERT
+import { MRInscription } from "@/Model/MInscription";
 import {Inscription_Ser_I} from "../Service/InscriptionSer"
 import { InscriptionMod } from "@/Model/InscriptionMod";
 
-export async function Inscription_Con_I(newInscription:InscriptionMod):Promise<number>{
+export async function Inscription_Con_I(newInscription:MRInscription):Promise<number>{
     try {
        
         // if(newInscription.latitude > 0 || newInscription.longitude > 0){

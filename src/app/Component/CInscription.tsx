@@ -6,46 +6,106 @@ import React, { useState, FormEvent, ChangeEvent } from 'react';
 import {InscriptionMod} from "../../Model/InscriptionMod"
 import {MApiResponse} from "../../Model/ApiResponseMod"
 import GoogleMaps from './CGoogleMpas';
-import '../css/alert.css';
+// import '../css/alert.css';
 import { Inscription_Con_I } from '@/Controller/InscriptionCon';
 import { Handlee } from 'next/font/google';
+import { Inscription, MRInscription, Person,User } from '@/Model/MInscription';
 // import LstGoogleMaps from './LstPoints';
 
 interface Point {
     lat:number
     lng:number
-} 
+}
+type InputText = {
+    value: string;
+    text: string;
+  };
+  
 
+  
 export function CFormInscription (){
     // --- VARIABLES
+    const genderOptions: InputText[] = [
+        { value: "MA", text: "Masculino" },
+        { value: "FE", text: "Femenino" },
+        { value: "OT", text: "Otro" }
+      ];
+      const containerOptions: InputText[] = [
+        { value: "BA", text: "Baldes" },
+        { value: "CO", text: "Contenedore" }
+      ];
+      const frequencyOptions: InputText[] = [
+        { value: "SE", text: "Semanal" },
+        { value: "QU", text: "Quincenal" }
+      ];
 
-    // const [points, setPoints] = useState<Point[]>([
-    //     { lat: -17.370554, lng: -66.187096 }, 
-    //     { lat: 34.052235, lng: -118.243683 }, 
-    //     { lat: 51.507351, lng: -0.127758 } 
-    // ]);
-
-
-    const inscriptionInicial:InscriptionMod = {
+      const scheduleOptions: InputText[] = [
+        { value: "LU,08:00:am,10:00:am", text: "Lunes, 08:00 am. a 10:00 am." },
+        { value: "LU,04:00:pm,06:00:pm", text: "Lunes, 04:00 pm. a 06:00 pm." },
+        { value: "DO,02:00:pm,04:00:pm", text: "Domingo, 02:00 pm. a 04:00 pm." },
+        { value: "DO,04:00:pm,06:00:pm", text: "Domingo, 04:00 pm. a 6:00 pm." }
+      ];
+      const paymentOptions: InputText[] = [
+        { value: "EF,DI", text: "Efectivo pagado en cada Recojo" },
+        { value: "EF,ME", text: "Efectivo pagado Mensualmente" },
+        { value: "QR.DI pagado en cada Recojo", text: "Qr pagado en cada Recojo" },
+        { value: "QR,ME", text: "Qr pagado Mensualmente" }
+      ];
+      const placeOptions: InputText[] = [
+        { value: "CASA", text: "Casa" },
+        { value: "RESTAURANTE", text: "Restaurante" },
+        { value: "HOTEL", text: "Hotel" },
+        { value: "ESCUELA", text: "Escuela" },
+        { value: "HOSPITAL", text: "Hospital" },
+        { value: "OFICINA", text: "Oficina" },
+        { value: "MERCADO", text: "Mercado" },
+        { value: "SUPERMERCADO", text: "Supermercado" },
+        { value: "PARQUE", text: "Parque" },
+        { value: "CENTRO COMERCIAL", text: "Centro comercial" },
+        { value: "ESTADIO", text: "Estadio" },
+        { value: "FÁBRICA", text: "Fábrica" },
+        { value: "GRANJA", text: "Granja" },
+        { value: "JARDÍN COMUNITARIO", text: "Jardín comunitario" },
+        { value: "CENTRO DE CONVENCIONES", text: "Centro de convenciones" }
+      ];
+      
+      
+      
+    const [person,setPerson] = useState<Person>({
         name: "",
         lastName: "",
         secondLastName: "",
         birthDay: new Date(),
-        cellPhone: 0,
-        gender: "MA",
-        inscription: "BA",
+        cellPhone: "",
+        gender: "",
+        modificationDate: new Date(),
+        registrationDate: new Date(),
+        status: "AC"
+      });
+
+      
+    const [user,setUser] = useState<User>({
+    occupation: "",
+    qr: ""
+    });
+
+    const [inscription,setInscription]= useState<Inscription>({
+        typePlace: "",
+        referenceLocation: "",
         latitude: 0,
         longitude: 0,
+        nameInscription: "",
         amountBucket: 0,
         amountContainer: 0,
-        frecuency: "SE",
-        pickUpDay: "Lunes, 08:00 am. a 10:00 am.",
-        paymentMethod: "Efectivo pagado en cada Recojo",
+        paymentMethod: "",
+        frecuency: "",
         registrationDate: new Date(),
         modificationDate: new Date(),
         status: "AC",
-        referenceLocation:""
-      } ;
+        pickUpDay: "",
+        idPerson: ""
+      });
+
     
     const today = new Date().toISOString().slice(0, 10); 
     const [apiResponse, setApiResponse] = useState<MApiResponse | null>(null);
@@ -58,9 +118,7 @@ export function CFormInscription (){
     const closeAlert = () => {
       setShowAlert(false);
     };
-    const [inscription,SetInscription] = useState<InscriptionMod>(
-        inscriptionInicial
-);
+ 
     
     // --- METHODS
 
@@ -68,31 +126,40 @@ export function CFormInscription (){
         event.preventDefault();
         const todayH = new Date().toISOString().slice(0, 10); 
         try {
-            console.log(inscription)
-            const response = await Inscription_Con_I(inscription)
-            // console.log(response)
-            //     handleAlert();
-            //     SetInscription(inscriptionInicial);
-            
+            const inscription_ = {
+                person: person,
+                user: user,
+                inscription: inscription} as MRInscription;
+
+                console.log(inscription_)
+            const response = await Inscription_Con_I(inscription_)
+            console.log(response)
         } catch (error) {
             console.error('Error al enviar el formulario:', error);
         }
 
       };
     
-      const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
+      const handleChangeInscription = (e: ChangeEvent<HTMLInputElement>): void => {
         const { name, value } = e.target;
-        SetInscription((prevPerson) => ({ ...prevPerson, [name]: value }));
+        setInscription((p) => ({ ...p, [name]: value }));
       };
-
-      const handleSelectChange = (e: ChangeEvent<HTMLSelectElement>): void => {
+      const handleChangePerson = (e: ChangeEvent<HTMLInputElement>): void => {
         const { name, value } = e.target;
-        SetInscription((prevPerson) => ({ ...prevPerson, [name]: value }));
-    };
+        setPerson((p) => ({ ...p, [name]: value }));
+      };
+      const handleSelectChangePerson = (e: ChangeEvent<HTMLSelectElement>): void => {
+        const { name, value } = e.target;
+        setPerson((p) => ({ ...p, [name]: value }));
+        };
+      const handleSelectChangeInscription = (e: ChangeEvent<HTMLSelectElement>): void => {
+        const { name, value } = e.target;
+        setInscription((i) => ({ ...i, [name]: value }));
+        };
     const onMapClick = (lat:number,lng:number)=>{
-        SetInscription((prevPerson) => ({ ...prevPerson, latitude:lat , longitude:lng }));
+        setInscription((prevPerson) => ({ ...prevPerson, latitude:lat , longitude:lng }));
     }
-
+   
 
     // -- COMPONENT
   return (
@@ -113,68 +180,78 @@ export function CFormInscription (){
             <div className="input-group">
                 <div className="input-box">
                     <label >Nombres :</label>
-                    <input  type="text" name="name" value={inscription.name} onChange={handleChange} placeholder="Nombres" required/>
+                    <input  type="text" name="name" value={person.name} onChange={handleChangePerson} placeholder="Nombres" required/>
                 </div>
 
                 <div className="input-box">
                     <label >Apellido Paterno :</label>
-                    <input  type="text" name="lastName" value={inscription.lastName} onChange={handleChange} placeholder="Apellido Materno" required/>
+                    <input  type="text" name="lastName" value={person.lastName} onChange={handleChangePerson} placeholder="Apellido Materno" required/>
                 </div>
 
                 <div className="input-box">
                     <label >Apellido Materno :</label>
-                    <input  type="text" name="secondLastName" value={inscription.secondLastName} onChange={handleChange} placeholder="Apellido Materno" required/>
+                    <input  type="text" name="secondLastName" value={person.secondLastName} onChange={handleChangePerson} placeholder="Apellido Materno" required/>
                 </div>
                 <div className="input-box">
-                    <label >Fecha de Nacimiento :</label>
-                    <input  type="date" name="birthDay"  onChange={handleChange} placeholder="Digite su e-mail" required/>
-                </div>
-
-                <div className="input-box">
-                    <label >Celular :</label>
-                    <input  type="tel" name="cellPhone" value={inscription.cellPhone} onChange={handleChange} placeholder="(xx) xxxx-xxxx" required/>
-                </div>
-
-                <div className="input-box">
-                    <label >Referencia de ubicacion :</label>
-                    <input  type="text" name="referenceLocation" value={inscription.referenceLocation} onChange={handleChange} placeholder="Referencia de Ubicacion" required/>
-                </div>
-                <div className="input-box">
-                    <label>Genero : 
+                    <label>Tipo Lugar : 
                         <br/>
-                        <select  name='gender' defaultValue={"MA"} onChange={handleSelectChange}  className="gender-group">
-                            <option  value="MA">Masculino</option>
-                            <option  value="FE">Femenino</option>
-                            <option  value="OT">Otro</option>
+                        <select  name='typePlace' onChange={handleSelectChangeInscription}  className="gender-group">
+                            {placeOptions.map(g=><option key={g.value} value={g.value}>{g.text}</option>)}
                         </select>
                     </label>
                    
                 </div>
                 <div className="input-box">
+                    <label >Nombre de su Residencia :</label>
+                    <input  type="text" name="nameInscription" value={inscription.nameInscription} onChange={handleChangeInscription} placeholder="Nombre de su Residencia" required/>
+                </div>
+                <div className="input-box">
+                    <label >Fecha de Nacimiento :</label>
+                    <input  type="date" name="birthDay" value={person.birthDay.toString()} onChange={handleChangePerson} placeholder="Digite su e-mail" required/>
+                </div>
+
+                <div className="input-box">
+                    <label >Celular :</label>
+                    <input  type="tel" name="cellPhone" value={person.cellPhone} onChange={handleChangePerson} placeholder="(xx) xxxx-xxxx" required/>
+                </div>
+
+                <div className="input-box">
+                    <label >Referencia de ubicacion :</label>
+                    <input  type="text" name="referenceLocation" value={inscription.referenceLocation} onChange={handleChangeInscription} placeholder="Referencia de Ubicacion" required/>
+                </div>
+                <div className="input-box">
+                    <label>Genero : 
+                        <br/>
+                        <select  name='gender' onChange={handleSelectChangePerson}  className="gender-group">
+                            {genderOptions.map(g=><option key={g.value} value={g.value}>{g.text}</option>)}
+                        </select>
+                    </label>
+                   
+                </div>
+
+                <div className="input-box">
                     <label>Inscripcion Plan : 
                         <br/>
-                        <select name='inscription' defaultValue={"BA"} onChange={handleSelectChange} className="gender-group">
-                            <option  value="BA">Baldes</option>
-                            <option  value="CO">Contenedore</option>
+                        <select name='inscription' onChange={handleSelectChangeInscription} className="gender-group">
+                            {containerOptions.map(c=><option key={c.value} value={c.value}>{c.text}</option>)}
                         </select>
                     </label>
                    
                 </div>
                 <div className="input-box">
                     <label >Cantidad de Baldes :</label>
-                    <input id="baldes" type="number" value={inscription.amountBucket} onChange={handleChange} name="amountBucket" placeholder="0" required/>
+                    <input id="baldes" type="number" value={inscription.amountBucket} onChange={handleChangeInscription} name="amountBucket" placeholder="0" required/>
                 </div>
                 <div className="input-box">
                     <label>Cantidad de Contenedores :</label>
-                    <input id="contenedore" type="number" value={inscription.amountContainer} onChange={handleChange} name="amountContainer" placeholder="0" required/>
+                    <input id="contenedore" type="number" value={inscription.amountContainer} onChange={handleChangeInscription} name="amountContainer" placeholder="0" required/>
                 </div>
 
                 <div className="input-box">
                     <label>Frecuencia de Recojo : 
                         <br/>
-                        <select name='frecuency' defaultValue={"SE"} onChange={handleSelectChange} className="gender-group">
-                            <option  value="SE">Semanal</option>
-                            <option  value="QU">Quincenal</option>
+                        <select name='frecuency' onChange={handleSelectChangeInscription} className="gender-group">
+                            {frequencyOptions.map(c=><option key={c.value} value={c.value}>{c.text}</option>)}
                         </select>
                     </label>
                 </div>
@@ -182,11 +259,8 @@ export function CFormInscription (){
             <div className="input-box">
                 <label>Dia de Recojo : 
                     <br/>
-                    <select name='pickUpDay' onChange={handleSelectChange} defaultValue={"Lunes, 08:00 am. a 10:00 am."} className="gender-group ">
-                        <option  value="Lunes, 08:00 am. a 10:00 am.">Lunes, 08:00 am. a 10:00 am. </option>
-                        <option  value="Lunes, 04:00 pm. a 06:00 pm.">Lunes, 04:00 pm. a 06:00 pm.  </option>
-                        <option  value="Domingo, 02:00 pm. a 04:00 pm. ">Domingo, 02:00 pm. a 04:00 pm.  </option>
-                        <option  value="Domingo, 04:00 pm. a 6:00 pm.  ">Domingo, 04:00 pm. a 6:00 pm.  </option>
+                    <select name='pickUpDay' onChange={handleSelectChangeInscription} className="gender-group ">
+                        {scheduleOptions.map(c=><option key={c.value} value={c.value}>{c.text}</option>)}
                     </select>
                 </label>
             </div>
@@ -194,11 +268,8 @@ export function CFormInscription (){
             <div className="input-box">
                 <label> Metodo de Pago : 
                     <br/>
-                    <select name='paymentMethod' defaultValue={"Efectivo pagado en cada Recojo"} onChange={handleSelectChange} className="gender-group">
-                        <option  value="Efectivo pagado en cada Recojo">Efectivo pagado en cada Recojo </option>
-                        <option  value="Efectivo pagado Mensualmente">Efectivo pagado Mensualmente </option>
-                        <option  value="Qr pagado en cada Recojo">Qr pagado en cada Recojo </option>
-                        <option  value="Qr pagado Mensualmente">Qr pagado Mensualmente</option>
+                    <select name='paymentMethod' onChange={handleSelectChangeInscription} className="gender-group">
+                    {paymentOptions.map(c=><option key={c.value} value={c.value}>{c.text}</option>)}
                     </select>
                 </label>
             </div>
@@ -219,30 +290,3 @@ export function CFormInscription (){
 </div>
 )
 }
-// integrate main to Deeveopment -
-
-
-/*
-
-{
-  "name": "To",
-  "lastName": "string",
-  "secondLastName": "string",
-  "birthDay": "2024-04-08T18:09:55.319Z",
-  "cellPhone": 2343453,
-  "gender": "MA",
-  "inscription": "string",
-  "latitude": 34.34,
-  "longitude": 24.34,
-  "amountBucket": 1,
-  "amountContainer": 0,
-  "frecuency": "string",
-  "pickUpDay": "string",
-  "paymentMethod": "string",
-  "registrationDate": "2024-04-08T18:09:55.319Z",
-  "modificationDate": "2024-04-08T18:09:55.319Z",
-  "status": "AC",
-  "referenceLocation": "por ahi"
-}
-
-*/
