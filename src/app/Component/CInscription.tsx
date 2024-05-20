@@ -70,7 +70,7 @@ export function CFormInscription (){
       ];
       
       
-      
+    const [isBC,setIsBC]= useState<boolean>(false);
     const [person,setPerson] = useState<Person>({
         name: "",
         lastName: "",

@@ -1,8 +1,17 @@
+
+:root {
+  --color-h1: #E3DBDB;
+  --color-background:#4E3D42;
+  --color-background-boxs:#6D6466;
+}
+
+
 .main {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+  background-color: var(--color-bacground);
 }
 .description {
   display: inherit;
