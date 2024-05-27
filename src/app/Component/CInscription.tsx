@@ -39,12 +39,14 @@ export function CFormInscription (){
         { value: "QU", text: "Quincenal" }
       ];
 
-      const scheduleOptions: InputText[] = [
-        { value: "LU,08:00:am,10:00:am", text: "Lunes, 08:00 am. a 10:00 am." },
-        { value: "LU,04:00:pm,06:00:pm", text: "Lunes, 04:00 pm. a 06:00 pm." },
-        { value: "DO,02:00:pm,04:00:pm", text: "Domingo, 02:00 pm. a 04:00 pm." },
-        { value: "DO,04:00:pm,06:00:pm", text: "Domingo, 04:00 pm. a 6:00 pm." }
+      const scheduleOptionsContainers: InputText[] = [
+        { value: "JU,02:00:pm,05:00:pm,CO", text: "Jueves, 02:00 pm. a 05:00 pm." }
       ];
+      const scheduleOptionsBuckets: InputText[] = [
+        { value: "LU,03:00:pm,05:00:pm,BA", text: "Lunes, 03:00 pm. a 05:00 pm." },
+        { value: "JU,10:00:am,12:00:am,BA", text: "Jueves, 10:00 am. a 12:00 am." },
+      ];
+
       const paymentOptions: InputText[] = [
         { value: "EF,DI", text: "Efectivo pagado en cada Recojo" },
         { value: "EF,ME", text: "Efectivo pagado Mensualmente" },
@@ -69,8 +71,7 @@ export function CFormInscription (){
         { value: "CENTRO DE CONVENCIONES", text: "Centro de convenciones" }
       ];
       
-      
-    const [isBC,setIsBC]= useState<boolean>(false);
+    const [isBC,setIsBC]= useState<boolean>(true);
     const [person,setPerson] = useState<Person>({
         name: "",
         lastName: "",
@@ -133,7 +134,7 @@ export function CFormInscription (){
 
                 console.log(inscription_)
             const response = await Inscription_Con_I(inscription_)
-            console.log(response)
+            response === 1 ? setShowAlert(true) : setShowAlert(false)
         } catch (error) {
             console.error('Error al enviar el formulario:', error);
         }
@@ -155,6 +156,11 @@ export function CFormInscription (){
       const handleSelectChangeInscription = (e: ChangeEvent<HTMLSelectElement>): void => {
         const { name, value } = e.target;
         setInscription((i) => ({ ...i, [name]: value }));
+        if(value === "BA"){
+            setIsBC(true)
+        }else if(value === "CO"){
+            setIsBC(false)
+        }
         };
     const onMapClick = (lat:number,lng:number)=>{
         setInscription((prevPerson) => ({ ...prevPerson, latitude:lat , longitude:lng }));
@@ -172,7 +178,7 @@ export function CFormInscription (){
         <form onSubmit={handleSubmit}>
             <div className="form-header">
                 <div className="title">
-                    <h1>INSCRIPCION</h1>
+                    <h1>INSCRIPCION HK</h1>
                 </div>
                
             </div>
@@ -238,14 +244,24 @@ export function CFormInscription (){
                     </label>
                    
                 </div>
-                <div className="input-box">
+                {
+                    isBC === true ? (
+                    <div className="input-box">
                     <label >Cantidad de Baldes :</label>
                     <input id="baldes" type="number" value={inscription.amountBucket} onChange={handleChangeInscription} name="amountBucket" placeholder="0" required/>
-                </div>
-                <div className="input-box">
+                    </div>
+                    ): <></>
+                }
+
+{
+                    isBC === false ? (
+                        <div className="input-box">
                     <label>Cantidad de Contenedores :</label>
                     <input id="contenedore" type="number" value={inscription.amountContainer} onChange={handleChangeInscription} name="amountContainer" placeholder="0" required/>
-                </div>
+                    </div>
+                    ): <></>
+                }
+         
 
                 <div className="input-box">
                     <label>Frecuencia de Recojo : 
@@ -256,14 +272,27 @@ export function CFormInscription (){
                     </label>
                 </div>
 
-            <div className="input-box">
-                <label>Dia de Recojo : 
-                    <br/>
-                    <select name='pickUpDay' onChange={handleSelectChangeInscription} className="gender-group ">
-                        {scheduleOptions.map(c=><option key={c.value} value={c.value}>{c.text}</option>)}
-                    </select>
-                </label>
-            </div>
+            {
+                isBC == true ? (
+                    <div className="input-box">
+                        <label>Dia de Recojo : 
+                            <br/>
+                            <select name='pickUpDay' onChange={handleSelectChangeInscription} className="gender-group ">
+                                {scheduleOptionsBuckets.map(c=><option key={c.value} value={c.value}>{c.text}</option>)}
+                            </select>
+                        </label>
+                    </div>
+                ):(
+                    <div className="input-box">
+                        <label>Dia de Recojo : 
+                            <br/>
+                            <select name='pickUpDay' onChange={handleSelectChangeInscription} className="gender-group ">
+                                {scheduleOptionsContainers.map(c=><option key={c.value} value={c.value}>{c.text}</option>)}
+                            </select>
+                        </label>
+                    </div>
+                )
+            }
 
             <div className="input-box">
                 <label> Metodo de Pago : 

@@ -7,17 +7,28 @@
     font-family: 'Inter', sans-serif;
 }
 
+
 :root {
-    --color-h1: #E3DBDB;
-    --color-background:#4E3D42;
+    /* --color-h1: #E3DBDB;
+    --color-background:#d4bd6fea;
     --color-background-boxs:#6D6466;
     --color-txt:#9F9F92;
-    --color-txt2:#5D576B;
+    --color-txt2:#74a172;
     --color-txt3:#D0E3CC;
     --color-txt4:#F4F3EE;
     --color-txt4:#8A817C;
-    --color-placeholder:#F4F3EE;
-  }
+    --color-placeholder:#F4F3EE; */
+  
+    --color-h1: #697c61;
+    --color-background:#e9d475ea;
+    --color-background-boxs:#be445f;
+    --color-txt:#e9e9c3;
+    --color-txt2:#e1f3e0;
+    --color-txt3:#e26319;
+    --color-txt4:#f4f0ee;
+    --color-txt4:#c0e08d;
+    --color-placeholder:#807e79;
+}
   
 
 h1{
@@ -31,7 +42,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    /* background-image: url('../images/fondo.jpg'); */
+    background-image: url('../images/fondo.jpg');
     background-size: cover; /* Ajusta el tamaño de la imagen para cubrir completamente el contenedor */
     background-position: center;
  
@@ -240,11 +251,11 @@ body {
     width: 100%;
     margin-top: 0%;
     border: none;
-    background-color: #003634;
+    background-color: var(--color-h1);
     padding: 0.62rem;
     border-radius: 5px;
     cursor: pointer;
-    color: #fff;
+    color: var(--color-background)
 }
 
 .continue-button button:hover {
