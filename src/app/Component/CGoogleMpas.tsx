@@ -2,12 +2,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
 
-
 interface GoogleMapsProps {
-    onMapClick: (lat:number,lng:number) => void;
+    onMapClick: (lat: number, lng: number) => void;
 }
 
-export default function GoogleMaps({onMapClick} : GoogleMapsProps) {
+export default function GoogleMaps({ onMapClick }: GoogleMapsProps) {
 
     const mapRef = useRef<HTMLDivElement>(null);
     const markerRef = useRef<google.maps.Marker | null>(null);
@@ -24,13 +23,14 @@ export default function GoogleMaps({onMapClick} : GoogleMapsProps) {
             const map = new google.maps.Map(mapRef.current as HTMLDivElement, {
                 center: { lat: -17.393390, lng: -66.178033 },
                 zoom: 15,
-                mapId: 'NEXT_MAPS_TUTS',
+                // Comentamos o eliminamos esta línea
+                // mapId: 'NEXT_MAPS_TUTS',
             });
 
             map.addListener("click", (event: google.maps.MapMouseEvent) => {
                 const latLng = event.latLng;
-                const lat:number|undefined = latLng?.lat() === undefined ? 0 : latLng?.lat();
-                const lng:number|undefined = latLng?.lng()=== undefined ? 0 : latLng?.lng();
+                const lat: number | undefined = latLng?.lat() === undefined ? 0 : latLng?.lat();
+                const lng: number | undefined = latLng?.lng() === undefined ? 0 : latLng?.lng();
                 if (markerRef.current) {
                     markerRef.current.setPosition(latLng);
                 } else {
@@ -40,7 +40,7 @@ export default function GoogleMaps({onMapClick} : GoogleMapsProps) {
                         title: "Ubicación seleccionada",
                     });
                 }
-                onMapClick(lat,lng)
+                onMapClick(lat, lng)
             });
         };
 
@@ -49,5 +49,3 @@ export default function GoogleMaps({onMapClick} : GoogleMapsProps) {
 
     return <div className='google-div' ref={mapRef}>Load...</div>;
 }
-
-// rama Abert

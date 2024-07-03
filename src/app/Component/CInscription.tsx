@@ -6,10 +6,12 @@ import React, { useState, FormEvent, ChangeEvent } from 'react';
 import {InscriptionMod} from "../../Model/InscriptionMod"
 import {MApiResponse} from "../../Model/ApiResponseMod"
 import GoogleMaps from './CGoogleMpas';
-// import '../css/alert.css';
 import { Inscription_Con_I } from '@/Controller/InscriptionCon';
 import { Handlee } from 'next/font/google';
+import {useRouter} from "next/navigation"
 import { Inscription, MRInscription, Person,User } from '@/Model/MInscription';
+import { validateMRInscription } from '@/Util/Validation';
+import "../css/Alert.css"
 // import LstGoogleMaps from './LstPoints';
 
 interface Point {
@@ -50,7 +52,7 @@ export function CFormInscription (){
       const paymentOptions: InputText[] = [
         { value: "EF,DI", text: "Efectivo pagado en cada Recojo" },
         { value: "EF,ME", text: "Efectivo pagado Mensualmente" },
-        { value: "QR.DI pagado en cada Recojo", text: "Qr pagado en cada Recojo" },
+        { value: "QR,DI", text: "Qr pagado en cada Recojo" },
         { value: "QR,ME", text: "Qr pagado Mensualmente" }
       ];
       const placeOptions: InputText[] = [
@@ -70,7 +72,7 @@ export function CFormInscription (){
         { value: "JARDÍN COMUNITARIO", text: "Jardín comunitario" },
         { value: "CENTRO DE CONVENCIONES", text: "Centro de convenciones" }
       ];
-      
+    const router = useRouter();
     const [isBC,setIsBC]= useState<boolean>(true);
     const [person,setPerson] = useState<Person>({
         name: "",
@@ -78,7 +80,7 @@ export function CFormInscription (){
         secondLastName: "",
         birthDay: new Date(),
         cellPhone: "",
-        gender: "",
+        gender: "MA",
         modificationDate: new Date(),
         registrationDate: new Date(),
         status: "AC"
@@ -91,33 +93,34 @@ export function CFormInscription (){
     });
 
     const [inscription,setInscription]= useState<Inscription>({
-        typePlace: "",
+        typePlace: "CASA",
         referenceLocation: "",
         latitude: 0,
         longitude: 0,
         nameInscription: "",
         amountBucket: 0,
         amountContainer: 0,
-        paymentMethod: "",
-        frecuency: "",
+        paymentMethod: "EF,DI",
+        frecuency: "SE",
         registrationDate: new Date(),
         modificationDate: new Date(),
         status: "AC",
-        pickUpDay: "",
+        pickUpDay: "LU,03:00:pm,05:00:pm,BA",
         idPerson: ""
       });
 
     
     const today = new Date().toISOString().slice(0, 10); 
     const [apiResponse, setApiResponse] = useState<MApiResponse | null>(null);
-    const [showAlert, setShowAlert] = useState(false);
-
-    const handleAlert = () => {
-      setShowAlert(true);
-    };
+    const [showAlert, setShowAlert] = useState(0);
+    const [formErrors, setFormErrors] = useState<string[]>([]);
   
     const closeAlert = () => {
-      setShowAlert(false);
+        if(showAlert==1){
+            router.refresh();
+           
+        }
+        setShowAlert(0);
     };
  
     
@@ -131,12 +134,21 @@ export function CFormInscription (){
                 person: person,
                 user: user,
                 inscription: inscription} as MRInscription;
-
-                console.log(inscription_)
-            const response = await Inscription_Con_I(inscription_)
-            response === 1 ? setShowAlert(true) : setShowAlert(false)
+            const errors = validateMRInscription(inscription_);
+            if (errors.length > 0) {
+                setFormErrors(errors.map(err => `${err.field}: ${err.message}`));
+            } else {
+                const response = await Inscription_Con_I(inscription_)
+                if(response ===1 ){
+                    setShowAlert(1);
+                }else if(response === 2){
+                    setShowAlert(2)
+                }
+               
+                setFormErrors([]);
+            }
         } catch (error) {
-            console.error('Error al enviar el formulario:', error);
+            console.error('Error al enviar el formulario:');
         }
 
       };
@@ -171,7 +183,6 @@ export function CFormInscription (){
   return (
     <div className="container">
     <div className="form-image">
-        {/* <LstGoogleMaps points={points} onMapClick={onMapClick}/> */}
         <GoogleMaps onMapClick={onMapClick}/>
     </div>
     <div className="form">
@@ -308,13 +319,29 @@ export function CFormInscription (){
                 <button>INSCRIBIRME</button>
             </div>
         </form>
-
-        {showAlert && (
-        <div className="alert-container">
+        {formErrors.length > 0 && (
+        <div>
+          <h3>Errores del formulario:</h3>
+          <ul>
+            {formErrors.map((error, index) => (
+              <li key={index}>{error}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+        {showAlert === 1 ? (
+        <div className="alert-container" >
             <span className="close-btn" onClick={closeAlert}>&times;</span>
           <label>INCRIPCION CREADA CORRECTAMENTE</label>
         </div>
-      )}
+      ):<></>}
+
+        {showAlert === 2 ? (
+        <div className="alert-container" >
+            <span className="close-btn" onClick={closeAlert}>&times;</span>
+          <label>Cuenta Existente Con ese Numero</label>
+        </div>
+      ):<></>}
     </div>
 </div>
 )
